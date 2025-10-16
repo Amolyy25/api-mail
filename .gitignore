@@ -1,0 +1,4 @@
+# Ignorer les dossiers de dépendances
+/venv/
+.env
+/__pycache__/

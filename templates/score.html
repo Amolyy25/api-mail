@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Votre récap {name}</title>
+    <style>
+      body { 
+        margin:0; 
+        font-family: 'Montserrat', sans-serif; 
+        background: linear-gradient(135deg, #F5F5F0 0%, #E8E0D5 100%);
+        color: #2F4538; 
+      }
+      .wrapper { 
+        max-width:620px; 
+        margin:0 auto; 
+        padding:24px; 
+      }
+      .card { 
+        background: #FFFFFF; 
+        border-radius:16px; 
+        padding:32px; 
+        box-shadow:0 8px 32px rgba(47, 69, 56, 0.1); 
+        margin-bottom: 20px;
+      }
+      .brand { 
+        display:flex; 
+        align-items:center; 
+        justify-content: center;
+        gap:16px; 
+        margin-bottom:32px; 
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(47, 69, 56, 0.08);
+      }
+      .brand img {
+        height: 50px;
+        width: auto;
+        filter: drop-shadow(0 2px 4px rgba(47, 69, 56, 0.1));
+      }
+      .brand h1 { 
+        margin:0; 
+        font-size:26px; 
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: #2F4538;
+      }
+      .title { 
+        font-size:26px; 
+        margin:0 0 24px; 
+        color: #2F4538; 
+        text-align: center;
+        font-weight: 700;
+      }
+      .lead { 
+        color: #2F4538; 
+        font-size:16px; 
+        line-height:1.7; 
+        margin-bottom: 20px;
+        text-align: center;
+        opacity: 0.85;
+      }
+      .stats-box {
+        border-radius: 12px;
+        padding: 24px;
+        margin: 16px 0;
+        text-align: center;
+        border-left: 5px solid #7C9082;
+        box-shadow: 0 2px 8px rgba(124, 144, 130, 0.15);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .stats-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(124, 144, 130, 0.25);
+      }
+      .stat-number {
+        font-size: 42px;
+        font-weight: 800;
+        color: #7C9082;
+        display: block;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+      }
+      .stat-label {
+        color: #2F4538;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 600;
+        opacity: 0.7;
+      }
+      .progress-section {
+        background: transparent;
+        border-radius: 12px;
+        padding: 12px 0;
+        margin: 24px 0;
+        text-align: center;
+      }
+      .progress-section .lead {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2F4538;
+        margin-bottom: 16px;
+        opacity: 1;
+      }
+      .progress-bar {
+        background: #E6E6E6;
+        border-radius: 10px;
+        height: 16px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+      .progress-fill {
+        background: #7C9082;
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+      .progress-text {
+        color: #2F4538;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+      .encouragement {
+        background: linear-gradient(135deg, #7C9082 0%, #9DB4A3 100%);
+        color: white;
+        padding: 28px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 24px 0;
+        box-shadow: 0 4px 16px rgba(124, 144, 130, 0.3);
+      }
+      .encouragement h3 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .encouragement p {
+        margin: 0;
+        font-size: 15px;
+        opacity: 0.95;
+        line-height: 1.5;
+      }
+      .btn { 
+        display:inline-block; 
+        margin-top:20px; 
+        background: linear-gradient(135deg, #7C9082 0%, #9DB4A3 100%);
+        color: #FFFFFF !important; 
+        text-decoration:none; 
+        padding:14px 28px; 
+        border-radius:12px; 
+        font-weight:700; 
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        box-shadow: 0 4px 12px rgba(124, 144, 130, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(124, 144, 130, 0.45);
+      }
+      .note { 
+        margin-top:16px; 
+        font-size:13px; 
+        color: #2F4538; 
+        line-height: 1.6;
+        opacity: 0.7;
+      }
+      .footer { 
+        text-align:center; 
+        color: #2F4538; 
+        font-size:12px; 
+        margin-top:32px; 
+        padding-top: 24px;
+        border-top: 1px solid #E6E6E6;
+        opacity: 0.7;
+      }
+      .footer a {
+        color: #7C9082;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
+      .footer a:hover {
+        color: #2F4538;
+        text-decoration: underline;
+      }
+      .social-links {
+        margin: 20px 0;
+      }
+      .social-links a {
+        display: inline-block;
+        margin: 0 10px;
+        color: #7C9082;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+      .social-links a:hover {
+        color: #2F4538;
+      }
+      @media (max-width: 600px) {
+        .wrapper {
+          padding: 16px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .divbrand {
+          justify-content: center;
+          display: flex;
+          align-items: center;
+          padding: 16px;
+          gap: 12px;
+        }
+        .logo {
+          height: 80px;
+          width: auto;
+        }
+        .brand h1 {
+          font-size: 20px;
+        }
+        .stat-number {
+          font-size: 28px;
+        }
+        .title {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      
+      
+      <div class="card">
+        <div class="divbrand">
+          <img  class="logo"src="https://serenityfitness.fr/image/logo.png" alt="Serenity Fitness">
+        </div>
+        <div class="title">Votre récap {name}</div>
+        
+        <div class="stats-box">
+          <span class="stat-number">{seances}</span>
+          <span class="stat-label">Séances la semaine dernière</span>
+        </div>
+        
+        <p class="lead">Vous avez fait <strong>{seances}</strong> séances la semaine dernière.</p>
+        
+        <div class="progress-section">
+          <p class="lead">Vos statistiques</p>
+          <div class="stats-box">
+            <span class="stat-number">{total_exercises}</span>
+            <span class="stat-label">Exercices réalisés</span>
+          </div>
+          <div class="stats-box">
+            <span class="stat-number">{repstotal}</span>
+            <span class="stat-label">Répétitions totales</span>
+          </div>
+          <p class="note">Dernière séance le {last_workout_date}</p>
+        </div>
+        
+        <div class="encouragement">
+          <h3>Bravo, continuez comme ça !</h3>
+          <p>Votre engagement et votre régularité portent leurs fruits</p>
+        </div>
+        
+        <p><a class="btn" href="https://serenityfitness.fr/html/carnet-entrainement.html" target="_blank" rel="noopener">Accéder à Mon Carnet</a></p>
+        
+        <p class="note">Vous recevez cet email car vous êtes membre de Serenity Fitness. Conformément au RGPD, vos données sont protégées.</p>
+      </div>
+      
+      <div class="footer">
+        <div class="social-links">
+          <a href="https://www.facebook.com/profile.php?id=61578164277898">Facebook</a>
+          <a href="https://www.instagram.com/serenityfitness42">Instagram</a>
+        </div>
+        <p>© Serenity Fitness — Le sport conscient</p>
+        <p>
+          <a href="https://serenityfitness.fr/mentions-legales">Mentions légales</a> | 
+          <a href="https://serenityfitness.fr/confidentialite">Confidentialité</a> | 
+          <a href="mailto:jolancleyet@serenityfitness.fr">Contact</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
