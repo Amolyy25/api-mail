@@ -1,1 +1,0 @@
-from envmail import app  # Vercel détecte automatiquement l'app ASGI
