@@ -29,12 +29,12 @@ def get_api_key(x_api_key: str = Header(None, alias="x-api-key")):
 
 @app.get("/")
 async def root():
-    return {"message": "API Email Serenity Fitness - Version 1.0.0", "status": "running"}
+    return {"message": "API Email - Version 1.0.0", "status": "running"}
 
 @app.post("/send-weekly-email")
 async def send_weekly_email(x_api_key: str = Depends(get_api_key)):
     try: 
-        emails = ["meiller.amaury@gmail.com", "amauryaustralie@gmail.com"]
+        emails = getallemail()
         for email in emails:
             await envmail(email)
         return {"success": True, "message": "Emails envoyé avec succès !"}
