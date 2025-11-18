@@ -30,7 +30,7 @@ def get_api_key(x_api_key: str = Header(None, alias="x-api-key")):
 @app.post("/send-weekly-email")
 async def send_weekly_email(x_api_key: str = Depends(get_api_key)):
     try: 
-        emails = ["meiller.amaury@gmail.com", "amauryaustralie@gmail.com"]
+        emails = getallemail()
         for email in emails:
             await envmail(email)
         return {"success": True, "message": "Emails envoyé avec succès !"}
@@ -73,15 +73,24 @@ def getclientbyid(email):
     except Exception as e:
         return None
 
-def getsessionsbyid(email):
+def getsessionsbyid(user_id):
     try:
-        responses = supabase.table('user_workout_stats').select('total_workouts, total_exercises, last_workout_date').eq('email', email).execute()
+        # Correction : utilisation de user_id au lieu de email
+        responses = supabase.table('user_workout_stats').select('total_workouts, total_exercises, last_workout_date, user_id').eq('user_id', user_id).execute()
         
         if responses.data:
             return responses.data[0]
-        return None
+        return {
+            'total_workouts': 0,
+            'total_exercises': 0,
+            'last_workout_date': 'Aucune séance'
+        }
     except Exception as e:
-        return None
+        return {
+            'total_workouts': 0,
+            'total_exercises': 0,
+            'last_workout_date': 'Erreur de chargement'
+        }
 
 from datetime import datetime, timedelta, timezone
 
@@ -101,6 +110,22 @@ def get_workout_ids_last_week(user_id: str):
         .lt('created_at', start_curr) \
         .execute()
     return [row['id'] for row in (r.data or [])]
+
+def get_workouts_count_last_week(user_id: str):
+    """Compte le nombre de séances de la semaine dernière"""
+    workout_ids = get_workout_ids_last_week(user_id)
+    return len(workout_ids)
+
+def get_exercises_count_last_week(user_id: str):
+    """Compte le nombre d'exercices de la semaine dernière"""
+    workout_ids = get_workout_ids_last_week(user_id)
+    if not workout_ids:
+        return 0
+    r = supabase.table('exercises') \
+        .select('name') \
+        .in_('workout_id', workout_ids) \
+        .execute()
+    return len(r.data) if r.data else 0
 
 def get_total_reps_last_week(user_id: str):
     workout_ids = get_workout_ids_last_week(user_id)
@@ -148,15 +173,29 @@ async def envmail(email):
                 detail="Configuration SMTP incomplète : mot de passe manquant"
             )
         datadb = getclientbyid(email)
-        datadb2 = getsessionsbyid(email)
-        repstotal, reps_par_exo = get_total_reps_last_week(datadb["id"])
-        print(repstotal)
+        if not datadb:
+            raise HTTPException(status_code=404, detail=f"Utilisateur introuvable pour l'email : {email}")
+        
+        user_id = datadb.get("id")
+        if not user_id:
+            raise HTTPException(status_code=500, detail="ID utilisateur manquant")
+        
+        # Récupération des statistiques GLOBALES (pour la dernière séance)
+        datadb2 = getsessionsbyid(user_id)
+        
+        # Calcul des statistiques de LA SEMAINE DERNIÈRE
+        seances_semaine = get_workouts_count_last_week(user_id)
+        exercices_semaine = get_exercises_count_last_week(user_id)
+        repstotal_semaine, reps_par_exo = get_total_reps_last_week(user_id)
+        
+        print(f"Stats semaine : {seances_semaine} séances, {exercices_semaine} exercices, {repstotal_semaine} reps")
+        
         variable = {
-            "name": datadb["full_name"],
-            "seances": datadb2["total_workouts"],
-            "last_workout_date": datadb2["last_workout_date"],
-            "total_exercises": datadb2["total_exercises"],
-            "repstotal": repstotal,
+            "name": datadb.get("full_name", "Utilisateur"),
+            "seances": seances_semaine,  # CORRECTION : séances de la semaine dernière
+            "last_workout_date": datadb2.get("last_workout_date", "Aucune séance"),
+            "total_exercises": exercices_semaine,  # CORRECTION : exercices de la semaine dernière
+            "repstotal": repstotal_semaine,  # Répétitions de la semaine dernière
         }
         contenue_html = charger_template_html("score.html", variable)
         if not contenue_html:

@@ -1,0 +1,63 @@
+📦 COMMANDES POUR DÉPLOYER SUR VERCEL
+==========================================
+
+1️⃣ VÉRIFIER LES FICHIERS MODIFIÉS
+-----------------------------------
+git status
+
+
+2️⃣ AJOUTER TOUS LES FICHIERS
+-----------------------------------
+git add .
+
+
+3️⃣ COMMIT AVEC MESSAGE DESCRIPTIF
+-----------------------------------
+git commit -m "Fix: Correction statistiques hebdomadaires + template excuses"
+
+
+4️⃣ PUSH SUR GITHUB (déploiement auto Vercel)
+-----------------------------------
+git push origin main
+
+
+5️⃣ VÉRIFIER LE DÉPLOIEMENT
+-----------------------------------
+- Aller sur https://vercel.com/dashboard
+- Vérifier que le build est réussi
+- Tester l'URL de production
+
+
+6️⃣ TESTER L'API EN PRODUCTION
+-----------------------------------
+# Remplacer YOUR_VERCEL_URL par ton URL
+# Remplacer YOUR_API_KEY par ta clé API
+
+# Test 1: Vérifier l'API
+curl https://YOUR_VERCEL_URL.vercel.app/
+
+# Test 2: Debug Supabase
+curl -X GET https://YOUR_VERCEL_URL.vercel.app/debug/test-supabase -H "x-api-key: YOUR_API_KEY"
+
+# Test 3: Envoyer emails hebdomadaires (tous les utilisateurs)
+curl -X POST https://YOUR_VERCEL_URL.vercel.app/send-weekly-email -H "x-api-key: YOUR_API_KEY"
+
+# Test 4: Envoyer emails d'excuses (tous les utilisateurs)
+curl -X POST https://YOUR_VERCEL_URL.vercel.app/send-excuse-email -H "x-api-key: YOUR_API_KEY"
+
+
+✅ CHECKLIST AVANT DE PUSH
+-----------------------------------
+[x] Emails prédéfinis supprimés (utilise getallemail())
+[x] Template excuses.html créé
+[x] Route /send-excuse-email ajoutée
+[x] Variables d'environnement configurées sur Vercel
+[x] Tests locaux réussis
+
+
+⚠️ IMPORTANT
+-----------------------------------
+- Les emails seront envoyés à TOUS les utilisateurs de la base
+- Vérifier que les variables d'environnement sont bien configurées sur Vercel
+- Tester d'abord avec l'endpoint /debug/test-supabase
+
